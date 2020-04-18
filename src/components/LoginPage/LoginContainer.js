@@ -1,55 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
-import socketIOClient from "socket.io-client";
+import { setAuthenticatedToken } from '../../services/AuthService';
 import { connect, useDispatch } from 'react-redux';
-import { sendMessage } from '../../redux/actions/userActions'
+import { sendMessage, loginUser } from '../../redux/actions/userActions';
+import {
+  useHistory,
+  useLocation
+} from "react-router-dom";
+
 
 const LoginContainter = (props) => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [content, setContent] = useState();
-  const [message, setMessage] = useState();
   const [announce, setAnnounce] = useState();
-
+  let history = useHistory();
+  let dispatch = useDispatch();
   useEffect(() => {
     // Update the document title using the browser API
-    const socket = socketIOClient('http://localhost:3000');
-    socket.on('chat', data => {
-      let latestContent = `${content} <br/> ${data}`;
-      setContent(latestContent);
-    });
-    socket.on('announce', data => {
-      let latestAnnounce = `${data}`;
-      setAnnounce(latestAnnounce);
-    });
-    console.log(props);
+    // const socket = socketIOClient('http://localhost:3000');
+    // socket.on('chat', data => {
+    //   let latestContent = `${content} <br/> ${data}`;
+    //   setContent(latestContent);
+    // });
+    // socket.on('announce', data => {
+    //   let latestAnnounce = `${data}`;
+    //   setAnnounce(latestAnnounce);
+    // });
   });
 
   async function onLoginClick() {
-    let bodyReq = {
-      "username": username
-    };
-    let fetchResponse = await fetch('http://localhost:3000/users/login', {
+    let fetchResponse = await fetch('http://localhost:3000/api/v1/user/login', {
       method: 'post',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: username,
-        password: password
+        username,
+        password
       })
     });
     const data = await fetchResponse.json()
     console.log(data);
-  }
-
-  function onSendMessage() {
-    const  { sendMessage } = props;
-    const socket = socketIOClient('http://localhost:3000');
-    socket.emit('chat', JSON.stringify(`${username} typed: ${message}`));
-    sendMessage(message);
+    const { userId } = data;
+    dispatch(loginUser(userId));
+    if (userId) {
+      setAuthenticatedToken(userId)
+      history.push('/dashboard');
+    } 
   }
 
   return (
@@ -68,17 +68,10 @@ const LoginContainter = (props) => {
           <Form.Control onChange={(e)=> setMessage(e.target.value)} />
         </Form.Group>
       </Form>
-      <p>{announce}</p>
       <p>You typed {username}/{password}</p>
-      <p>{content}</p>
       <div>
         <Button variant="primary" type="submit" onClick={(e)=> onLoginClick()}>
           Submit
-        </Button>
-      </div>
-      <div>
-        <Button variant="primary" type="submit" onClick={(e)=> onSendMessage()}>
-          Send
         </Button>
       </div>
     </Container>

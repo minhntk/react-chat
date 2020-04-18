@@ -2,7 +2,7 @@ import { userReducers } from './userReducers';
 import { combineReducers } from 'redux';
 
 const chatApp = combineReducers({
-  userReducers
+  userAuth: userReducers
 })
 
 export default chatApp;

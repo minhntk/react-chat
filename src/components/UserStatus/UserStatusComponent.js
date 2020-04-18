@@ -2,7 +2,7 @@ import React, { useState }  from 'react';
 import { InputGroup, DropdownButton, Dropdown } from 'react-bootstrap';
 
 const UserStatusComponent = () => {
-  const [status, setStatus] = useState("offline");
+  const [status, setStatus] = useState("status");
   return (
     <InputGroup className="mb-3">
       <DropdownButton
