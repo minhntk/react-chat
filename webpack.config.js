@@ -34,6 +34,7 @@ module.exports = {
   },
   devtool: 'cheap-module-eavl-source-map',
   devServer: {
+    historyApiFallback: true,
     contentBase: path.join(__dirname, 'public')
   },
   plugins: [

@@ -43,7 +43,6 @@ const LoginContainter = (props) => {
       })
     });
     const data = await fetchResponse.json()
-    console.log(data);
     const { userId } = data;
     dispatch(loginUser(userId));
     if (userId) {
@@ -63,12 +62,7 @@ const LoginContainter = (props) => {
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" onChange={(e)=> setPassword(e.target.value)} />
         </Form.Group>
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>Content</Form.Label>
-          <Form.Control onChange={(e)=> setMessage(e.target.value)} />
-        </Form.Group>
       </Form>
-      <p>You typed {username}/{password}</p>
       <div>
         <Button variant="primary" type="submit" onClick={(e)=> onLoginClick()}>
           Submit

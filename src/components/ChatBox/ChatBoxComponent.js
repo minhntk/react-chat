@@ -42,17 +42,20 @@ const ChatBoxComponent = () => {
 }
 
   return(
-    <Form>
-      <Form.Group controlId="chatBoxTxtArea">
-        <Form.Control as="textarea" value={content} rows="10" onChange={(e)=> setContent(e.target.value)} />
-        <div>
-        <Button variant="primary" type="button" onClick={(e)=> onSendMessage()}>
-          Send
-        </Button>
-        </div>
-        <div>{chatContent}</div>
-      </Form.Group>
-    </Form>
+    <div>
+      <div>Chat Box:</div>
+      <Form>
+        <Form.Group controlId="chatBoxTxtArea">
+          <Form.Control as="textarea" value={content} rows="10" onChange={(e)=> setContent(e.target.value)} />
+          <div>
+          <Button variant="primary" type="button" onClick={(e)=> onSendMessage()}>
+            Send
+          </Button>
+          </div>
+          <div dangerouslySetInnerHTML={{__html: chatContent}}></div>
+        </Form.Group>
+      </Form>
+    </div>
   );
 };
 
